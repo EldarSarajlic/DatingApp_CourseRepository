@@ -4,6 +4,7 @@ import {AccountService} from '../../core/services/account-service';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {ToastService} from '../../core/services/toast-service';
 import {themes} from '../themes';
+import {BusyService} from '../../core/services/busy-service';
 
 @Component({
   selector: 'app-nav',
@@ -18,6 +19,7 @@ export class Nav implements OnInit {
   protected creds: any = {}
   protected selectedTheme = signal<string>(localStorage.getItem('theme') || 'light');
   protected themes = themes;
+  protected busyService = inject(BusyService);
 
   ngOnInit(): void {
     document.documentElement.setAttribute('data-theme', this.selectedTheme());
@@ -26,6 +28,10 @@ export class Nav implements OnInit {
     this.selectedTheme.set(theme);
     localStorage.setItem('theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
+    this.ifClickedOn();
+  }
+
+  ifClickedOn(){
     const elem = document.activeElement as HTMLDivElement;
     if(elem) elem.blur();
   }
